@@ -21,21 +21,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 2. Manejo del Formulario de Cotización
+    // 2. Manejo del Formulario de Cotización con Google Forms
     const quoteForm = document.getElementById('quoteForm');
     const formSuccess = document.getElementById('formSuccess');
+
+    // URL exacta de tu formulario de Google
+    const googleActionURL = 'https://docs.google.com/forms/d/e/1FAIpQLSc405hmkbp-U6CABhT-3w9JBDOCvCZ7PHwXs5iw16kdzdlLqQ/formResponse';
 
     if (quoteForm) {
         quoteForm.addEventListener('submit', function(e) {
             e.preventDefault(); // Evita que la página recargue
             
-            // Aquí puedes conectar en el futuro un servicio como Formspree, EmailJS o tu propia API
-            // Por ahora, simulamos el envío exitoso:
+            const formData = new FormData(quoteForm);
             
-            // Ocultar formulario
-            quoteForm.style.display = 'none';
-            // Mostrar mensaje de éxito
-            formSuccess.classList.remove('hidden');
+            fetch(googleActionURL, {
+                method: 'POST',
+                mode: 'no-cors', // Fundamental para enviar los datos de forma silenciosa
+                body: formData
+            }).then(() => {
+                // Ocultar el formulario
+                quoteForm.style.display = 'none';
+                // Mostrar el mensaje de éxito diseñado en CSS
+                formSuccess.classList.remove('hidden');
+                // Limpiar los campos
+                quoteForm.reset(); 
+            }).catch(error => {
+                alert("Hubo un error de conexión. Por favor, intenta de nuevo.");
+                console.error('Error:', error);
+            });
         });
     }
 });
