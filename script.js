@@ -21,33 +21,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 2. Manejo del Formulario de Cotización con Google Forms
+    // 2. Manejo del Formulario de Cotización con FormSubmit (Envío a Correo)
     const quoteForm = document.getElementById('quoteForm');
     const formSuccess = document.getElementById('formSuccess');
-    
-    // URL exacta de tu formulario de Google
-    const googleActionURL = 'https://docs.google.com/forms/d/e/1FAIpQLSc405hmkbp-U6CABhT-3w9JBDOCvCZ7PHwXs5iw16kdzdlLqQ/formResponse';
+
+    // Conexión AJAX de FormSubmit a tu correo
+    const emailActionURL = 'https://formsubmit.co/ajax/capalmsoft@hotmail.com';
 
     if (quoteForm) {
         quoteForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita que la página recargue
+            e.preventDefault(); 
             
+            const btn = quoteForm.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = "Enviando mensaje...";
+            btn.disabled = true;
+
             const formData = new FormData(quoteForm);
+            const dataObject = Object.fromEntries(formData.entries());
             
-            fetch(googleActionURL, {
+            fetch(emailActionURL, {
                 method: 'POST',
-                mode: 'no-cors', // Fundamental para enviar los datos de forma silenciosa
-                body: formData
-            }).then(() => {
-                // Ocultar el formulario
-                quoteForm.style.display = 'none';
-                // Mostrar el mensaje de éxito diseñado en CSS
-                formSuccess.classList.remove('hidden');
-                // Limpiar los campos
-                quoteForm.reset(); 
-            }).catch(error => {
-                alert("Hubo un error de conexión. Por favor, intenta de nuevo.");
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(dataObject)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Si el envío fue exitoso
+                if(data.success === "true" || data.success === true) {
+                    quoteForm.style.display = 'none';
+                    formSuccess.classList.remove('hidden');
+                    quoteForm.reset(); 
+                } else {
+                    // Mensaje de alerta en caso de que requiera activación
+                    alert("Revisa tu correo capalmsoft@hotmail.com. FormSubmit requiere que actives el servicio la primera vez.");
+                    console.log(data);
+                }
+            })
+            .catch(error => {
+                alert("Hubo un error de conexión al enviar el correo. Por favor, intenta de nuevo.");
                 console.error('Error:', error);
+            })
+            .finally(() => {
+                btn.innerText = originalText;
+                btn.disabled = false;
             });
         });
     }
