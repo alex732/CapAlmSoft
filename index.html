@@ -114,20 +114,26 @@
                 <form id="quoteForm" class="form">
                     <div class="input-group">
                         <label for="nombre">Nombre Completo o Empresa</label>
-                        <input type="text" id="nombre" name="entry.2139822836" required placeholder="Ej. Juan Pérez">
+                        <input type="text" id="nombre" name="Nombre" required placeholder="Ej. Juan Pérez">
                     </div>
                     <div class="input-group">
                         <label for="email">Correo Electrónico</label>
-                        <input type="email" id="email" name="entry.915088792" required placeholder="tu@correo.com">
+                        <input type="email" id="email" name="Email" required placeholder="tu@correo.com">
                     </div>
                     <div class="input-group">
                         <label for="telefono">Número de Teléfono</label>
-                        <input type="tel" id="telefono" name="entry.1868920614" required placeholder="+1 (XXX) XXX-XXXX">
+                        <input type="tel" id="telefono" name="Telefono" required placeholder="+1 (XXX) XXX-XXXX">
                     </div>
                     <div class="input-group">
                         <label for="mensaje">Detalles de tu solicitud</label>
-                        <textarea id="mensaje" name="entry.297769373" rows="4" required placeholder="Deseo una cotización para implementar Pantalla Informativa en 2 pantallas de mi sucursal..."></textarea>
+                        <textarea id="mensaje" name="Mensaje" rows="4" required placeholder="Deseo una cotización para implementar Pantalla Informativa en 2 pantallas de mi sucursal..."></textarea>
                     </div>
+                    
+                    <!-- Configuraciones ocultas para FormSubmit -->
+                    <input type="hidden" name="_subject" value="🎯 Nueva Cotización - Pantalla Informativa">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    
                     <button type="submit" class="btn-primary w-100">Enviar Solicitud de Cotización</button>
                 </form>
                 <div id="formSuccess" class="form-success hidden">
