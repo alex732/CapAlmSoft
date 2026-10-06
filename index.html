@@ -79,38 +79,50 @@
             
             <div class="gallery-grid">
                 <!-- Video Demostrativo -->
-                <div class="gallery-item video-container-item" style="grid-column: span 2;">
-                    <video controls autoplay muted loop class="w-full h-full object-cover rounded-2xl shadow-xl">
-                        <source src="video_1.mp4" type="video/mp4">
-                        Tu navegador no soporta la reproducción de videos.
-                    </video>
+                <div class="gallery-item" style="grid-column: span 2; height: auto;">
+                    <div style="width: 100%; border-radius: 1rem; overflow: hidden; background: #000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                        <video controls autoplay muted loop playsinline style="width: 100%; height: auto; display: block; max-height: 400px; object-fit: cover;">
+                            <source src="Video sin título.mp4" type="video/mp4">
+                            Tu navegador no soporta la reproducción de videos.
+                        </video>
+                    </div>
                     <div class="gallery-overlay"><span>Demostración en Video del Sistema</span></div>
                 </div>
 
-                <!-- Imágenes del Sistema -->
+                <!-- Nuevas Imágenes -->
                 <div class="gallery-item">
-                    <img src="d37e0485-9f64-4754-a1da-17adeae8eb22.png" alt="Vista Principal de Pantalla de Víveres">
-                    <div class="gallery-overlay"><span>Pantalla Principal - Viveres</span></div>
+                    <img src="d37e0485-9f64-4754-a1da-17adeae8eb22.png" alt="Pantalla Principal de Víveres">
+                    <div class="gallery-overlay"><span>Pantalla Principal - Viveres</span>[cite: 6]</div>
                 </div>
                 <div class="gallery-item">
                     <img src="08.jpeg" alt="Proyección en Múltiples Secciones">
-                    <div class="gallery-overlay"><span>Visualización de Catálogo Completo</span></div>
+                    <div class="gallery-overlay"><span>Visualización de Catálogo Completo</span>[cite: 3]</div>
                 </div>
                 <div class="gallery-item">
                     <img src="06.jpg" alt="Configuración de Precios y Categorías">
-                    <div class="gallery-overlay"><span>Panel y Distribución en Pantalla</span></div>
+                    <div class="gallery-overlay"><span>Panel y Distribución en Pantalla</span>[cite: 4]</div>
                 </div>
                 <div class="gallery-item">
                     <img src="07.jpg" alt="Monitores en Operación en Local Comercial">
-                    <div class="gallery-overlay"><span>Monitores Múltiples Operativos</span></div>
+                    <div class="gallery-overlay"><span>Monitores Múltiples Operativos</span>[cite: 5]</div>
+                </div>
+
+                <!-- Imágenes Anteriores Conservadas -->
+                <div class="gallery-item">
+                    <img src="pic1.jpg" alt="Pantalla Pública de Clientes">
+                    <div class="gallery-overlay"><span>Menú Digital Multimonitor</span></div>
                 </div>
                 <div class="gallery-item">
                     <img src="pic2.jpg" alt="Vista General del Inventario">
                     <div class="gallery-overlay"><span>Control Total de Inventario</span></div>
                 </div>
                 <div class="gallery-item">
-                    <img src="pic1.jpg" alt="Pantalla Pública de Clientes">
-                    <div class="gallery-overlay"><span>Menú Digital Multimonitor</span></div>
+                    <img src="pic3.jpg" alt="Mantenimiento de Productos">
+                    <div class="gallery-overlay"><span>Gestión Rápida de Productos</span></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="pic4.jpg" alt="Consola y Estabilidad">
+                    <div class="gallery-overlay"><span>Monitoreo en Tiempo Real</span></div>
                 </div>
             </div>
         </div>
@@ -147,7 +159,6 @@
                         <textarea id="mensaje" name="Mensaje" rows="4" required placeholder="Deseo una cotización para implementar Pantalla Informativa en 2 pantallas de mi sucursal..."></textarea>
                     </div>
                     
-                    <!-- Configuraciones ocultas para FormSubmit -->
                     <input type="hidden" name="_subject" value="🎯 Nueva Cotización - Pantalla Informativa">
                     <input type="hidden" name="_captcha" value="false">
                     <input type="hidden" name="_template" value="table">
@@ -163,10 +174,12 @@
         </div>
     </section>
 
-    <!-- Modal para ver imágenes en pantalla completa -->
+    <!-- Modal para ver imágenes en pantalla completa tipo Carrusel -->
     <div id="imageModal" class="modal-img-container">
         <span class="modal-img-close">&times;</span>
-        <img class="modal-img-content" id="expandedImg">
+        <button class="carousel-btn prev-btn" id="prevBtn">&#10094;</button>
+        <img class="modal-img-content" id="expandedImg" alt="Vista ampliada">
+        <button class="carousel-btn next-btn" id="nextBtn">&#10095;</button>
     </div>
 
     <!-- Pie de página -->
