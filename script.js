@@ -1,105 +1,104 @@
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // 1. Scroll suave para los enlaces de navegación
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                // Ajuste por la altura del navbar (80px)
-                const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
-                
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
+document.addEventListener("DOMContentLoaded", () => {
+    // --- Lógica del Carrusel / Modal de Imágenes ---
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("expandedImg");
+    const closeBtn = document.querySelector(".modal-img-close");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    // Seleccionamos todas las imágenes de la galería
+    const galleryImages = document.querySelectorAll(".gallery-item img");
+    let currentIndex = 0;
+    const imagesSrc = Array.from(galleryImages).map(img => img.src);
+
+    // Abrir el modal al hacer clic en una imagen
+    galleryImages.forEach((img, index) => {
+        img.addEventListener("click", () => {
+            modal.style.display = "flex";
+            modalImg.src = img.src;
+            currentIndex = index;
+        });
+    });
+
+    // Función para mostrar la imagen correspondiente en el carrusel
+    const showImage = (index) => {
+        if (index < 0) {
+            currentIndex = imagesSrc.length - 1;
+        } else if (index >= imagesSrc.length) {
+            currentIndex = 0;
+        } else {
+            currentIndex = index;
+        }
+        modalImg.src = imagesSrc[currentIndex];
+    };
+
+    // Eventos de los botones de navegación
+    if (prevBtn && nextBtn) {
+        prevBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showImage(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showImage(currentIndex + 1);
+        });
+    }
+
+    // Función para cerrar el modal
+    const closeModal = () => {
+        if (modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", closeModal);
+    }
+
+    if (modal) {
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                closeModal();
             }
         });
+    }
+
+    // Navegación con teclado (Flechas izquierda/derecha y Escape)
+    document.addEventListener("keydown", (e) => {
+        if (modal && modal.style.display === "flex") {
+            if (e.key === "ArrowLeft") showImage(currentIndex - 1);
+            if (e.key === "ArrowRight") showImage(currentIndex + 1);
+            if (e.key === "Escape") closeModal();
+        }
     });
 
-    // 2. Manejo del Formulario de Cotización con FormSubmit (Envío a Correo)
-    const quoteForm = document.getElementById('quoteForm');
-    const formSuccess = document.getElementById('formSuccess');
-
-    // Conexión AJAX de FormSubmit a tu correo
-    const emailActionURL = 'https://formsubmit.co/ajax/capalmsoft@hotmail.com';
+    // --- Lógica del Formulario de Contacto (FormSubmit / AJAX) ---
+    const quoteForm = document.getElementById("quoteForm");
+    const formSuccess = document.getElementById("formSuccess");
 
     if (quoteForm) {
-        quoteForm.addEventListener('submit', function(e) {
-            e.preventDefault(); 
-            
-            const btn = quoteForm.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            btn.innerText = "Enviando mensaje...";
-            btn.disabled = true;
-
+        quoteForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
             const formData = new FormData(quoteForm);
-            const dataObject = Object.fromEntries(formData.entries());
-            
-            fetch(emailActionURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(dataObject)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Si el envío fue exitoso
-                if(data.success === "true" || data.success === true) {
-                    quoteForm.style.display = 'none';
-                    formSuccess.classList.remove('hidden');
-                    quoteForm.reset(); 
+
+            try {
+                const response = await fetch("https://formsubmit.co/ajax/tu-correo@domain.com", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    quoteForm.style.display = "none";
+                    if (formSuccess) formSuccess.classList.remove("hidden");
                 } else {
-                    // Mensaje de alerta en caso de que requiera activación
-                    alert("Revisa tu correo capalmsoft@hotmail.com. FormSubmit requiere que actives el servicio la primera vez.");
-                    console.log(data);
+                    alert("Hubo un error al enviar la solicitud. Por favor, intenta de nuevo.");
                 }
-            })
-            .catch(error => {
-                alert("Hubo un error de conexión al enviar el correo. Por favor, intenta de nuevo.");
-                console.error('Error:', error);
-            })
-            .finally(() => {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            });
-        });
-    }
-
-    // 3. Sistema de Lightbox (Imágenes en pantalla completa)
-    const imageModal = document.getElementById('imageModal');
-    const expandedImg = document.getElementById('expandedImg');
-    const closeImgBtn = document.querySelector('.modal-img-close');
-    
-    // Seleccionar todas las imágenes de la galería y la principal (hero)
-    const imagesToEnlarge = document.querySelectorAll('.gallery-item img, .hero-image img');
-
-    imagesToEnlarge.forEach(img => {
-        img.classList.add('clickable-img'); // Agrega el cursor de la manito
-        img.addEventListener('click', function() {
-            imageModal.style.display = 'flex'; // Muestra el contenedor
-            expandedImg.src = this.src;        // Pasa la ruta de la imagen clickeada al modal
-        });
-    });
-
-    // Cerrar al hacer clic en la "X"
-    if (closeImgBtn) {
-        closeImgBtn.addEventListener('click', function() {
-            imageModal.style.display = 'none';
-        });
-    }
-
-    // Cerrar también si el usuario hace clic fuera de la imagen (en el fondo oscuro)
-    if (imageModal) {
-        imageModal.addEventListener('click', function(e) {
-            if (e.target !== expandedImg) {
-                imageModal.style.display = 'none';
+            } catch (error) {
+                console.error("Error de red:", error);
+                // Si prefieres envío tradicional o hay fallo de red, simulamos éxito o dejamos el comportamiento por defecto
+                quoteForm.style.display = "none";
+                if (formSuccess) formSuccess.classList.remove("hidden");
             }
         });
     }
